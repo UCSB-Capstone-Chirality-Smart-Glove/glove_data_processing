@@ -26,28 +26,33 @@ void fill_rotation_matrix(rotation_vec3 rotation, double frequency, vec3 matrix[
 }
 
 void fill_change_basis_matrix(vec3 old[3], vec3 new[3], vec3 matrix[3]) {
-    // find inverse of old basis
-    vec3 old_inverse[3] = {
+    // find inverse of new basis
+    float det11 = new[1].y*new[2].z - new[1].z*new[2].y;
+    float det21 = new[0].z*new[2].y - new[0].y*new[2].z;
+    float det31 = new[0].y*new[1].z - new[0].z*new[1].y;
+    float det = det11 * new[0].x + det21 * new[0].y + det31 * new[0].z;
+    vec3 new_inverse[3] = {
         (vec3) {
-            .x = old[1].y*old[2].z - old[1].z*old[2].y,
-            .y = old[1].z*old[2].x - old[1].x*old[2].z,
-            .z = old[1].x*old[2].y - old[1].y*old[2].x
+            .x = (new[1].y*new[2].z - new[1].z*new[2].y)/det,
+            .y = (new[0].z*new[2].y - new[0].y*new[2].z)/det,
+            .z = (new[0].y*new[1].z - new[0].z*new[1].y)/det
         },
         (vec3) {
-            .x = old[0].z*old[2].y - old[0].y*old[2].z,
-            .y = old[0].x*old[2].z - old[0].z*old[2].x,
-            .z = old[0].y*old[2].x - old[0].x*old[2].y
+            .x = (new[1].z*new[2].x - new[1].x*new[2].z)/det,
+            .y = (new[0].x*new[2].z - new[0].z*new[2].x)/det,
+            .z = (new[0].z*new[1].x - new[0].x*new[1].z)/det
         }, 
         (vec3) {
-            .x = old[0].y*old[1].z - old[0].z*old[1].y,
-            .y = old[0].z*old[1].x - old[0].x*old[1].z,
-            .z = old[0].x*old[1].y - old[0].y*old[1].x
+            .x = (new[1].x*new[2].y - new[1].y*new[2].x)/det,
+            .y = (new[0].y*new[2].x - new[0].x*new[2].y)/det,
+            .z = (new[0].x*new[1].y - new[0].y*new[1].x)/det
         }
     };
-    // multiply new basis by inverse of old basis
-    matrix[0] = multiply_vector_over_matrix(old_inverse, new[0]);
-    matrix[1] = multiply_vector_over_matrix(old_inverse, new[1]);
-    matrix[2] = multiply_vector_over_matrix(old_inverse, new[2]);
+
+    // multiply inverse new basis by old basis
+    matrix[0] = multiply_vector_over_matrix(new_inverse, old[0]);
+    matrix[1] = multiply_vector_over_matrix(new_inverse, old[1]);
+    matrix[2] = multiply_vector_over_matrix(new_inverse, old[2]);
 }
 
 void swap(double* a, double* b) {

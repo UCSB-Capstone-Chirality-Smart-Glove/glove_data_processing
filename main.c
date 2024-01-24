@@ -11,6 +11,7 @@ int main() {
     //--- test utils ---//
     test_multiply_vector_over_matrix();
     test_fill_rotation_matrix();
+    test_fill_change_basis_matrix();
     // while(running) {
     //     // update fingers
 

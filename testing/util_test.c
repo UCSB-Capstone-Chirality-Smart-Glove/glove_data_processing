@@ -6,7 +6,7 @@ int vectors_are_same(vec3 a, vec3 b) {
 }
 
 void print_vector(vec3 vec) {
-    printf("[%f, %f, %f]", vec.x, vec.y, vec.z);
+    printf("[%f, %f, %f]\n", vec.x, vec.y, vec.z);
 }
 
 void print_matrix(vec3 matrix[3]) {
@@ -68,13 +68,33 @@ void test_fill_rotation_matrix() {
     }
 }
 
-void test_fill_change_basis_matrix(){
+void test_fill_change_basis_matrix() {
     printf("Testing fill_change_basis_matrix...");
-    vec3 old_basis[3] = {(vec3) {1, 2, 3}, 
-                         (vec3) {4, 5, 6}, 
-                         (vec3) {7, 8, 9}};
-    vec3 new_basis[3] = {(vec3) {0, 2, 0}, 
-                         (vec3) {9, 4, 2}, 
-                         (vec3) {8, 8, 8}};
+    vec3 old_basis[3] = {(vec3) {1, 0, 0}, 
+                         (vec3) {0, 1, 0}, 
+                         (vec3) {0, 0, 1}};
+    vec3 new_basis[3] = {(vec3) {1, 2, 3}, 
+                         (vec3) {2, 1, 4}, 
+                         (vec3) {3, 1, 9}};
+    vec3 change_basis_matrix[3] = {(vec3) {1, 0, 0}, 
+                                   (vec3) {0, 1, 0}, 
+                                   (vec3) {0, 0, 1}};
+    fill_change_basis_matrix(old_basis, new_basis, change_basis_matrix);
+    vec3 test_input = (vec3) {1, 2, 3};
+    vec3 expected_output = (vec3) {1, 0, 0};
+    vec3 output = multiply_vector_over_matrix(change_basis_matrix, test_input);
+
+    if (vectors_are_same(expected_output, output)) {
+        printf("Success!\n");
+    }
+    else {
+        printf("Failed:\n");
+        printf("Expected:\n");
+        print_vector(expected_output);
+        printf("Actual:\n");
+        print_vector(output);
+        printf("Matrix:\n");
+        print_matrix(change_basis_matrix);
+    }
 
 }
