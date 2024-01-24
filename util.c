@@ -9,7 +9,7 @@ vec3 multiply_vector_over_matrix(vec3 matrix[3], vec3 vector) {
     return result;
 }
 
-void fill_rotation_matrix(rotation_vec3 rotation, double frequency, vec3 matrix[3]) {
+void fill_rotation_matrix(rotation_vec3 rotation, float frequency, vec3 matrix[3]) {
     int16_t roll = rotation.roll/frequency*ANGLE_RESOLUTION;
     int16_t pitch = rotation.pitch/frequency*ANGLE_RESOLUTION;
     int16_t yaw = rotation.yaw/frequency*ANGLE_RESOLUTION;
@@ -55,8 +55,8 @@ void fill_change_basis_matrix(vec3 old[3], vec3 new[3], vec3 matrix[3]) {
     matrix[2] = multiply_vector_over_matrix(new_inverse, old[2]);
 }
 
-void swap(double* a, double* b) {
-    double swap = *a;
+void swap(float* a, float* b) {
+    float swap = *a;
     *a = *b;
     *b = swap;
 }
