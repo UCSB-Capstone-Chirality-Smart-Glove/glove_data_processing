@@ -1,8 +1,8 @@
 #include <math.h>
 #include "finger.h"
 
-int16_t get_bend(FingerSensorData finger_data, int16_t frequency) {
-    return (finger_data.base.pitch - finger_data.tip.pitch)/frequency;
+int16_t get_bend(FingerSensorData* finger_data, int16_t frequency) {
+    return (finger_data->base.pitch - finger_data->tip.pitch)/frequency;
 }
 
 void calibrate_finger(Finger* finger) {
@@ -11,10 +11,10 @@ void calibrate_finger(Finger* finger) {
     finger->basis[2] = (vec3) {0, 0, 1};
 }
 
-void update_finger(Finger* finger, FingerSensorData finger_data, int16_t frequency, vec3* hand_basis) {
+void update_finger(Finger* finger, FingerSensorData* finger_data, int16_t frequency, vec3* hand_basis) {
     // update direction
-    vec3 rotation_matrix[3];
-    fill_rotation_matrix(finger_data.base, frequency, rotation_matrix);
+    vec3* rotation_matrix = calloc(3, sizeof(vec3));
+    fill_rotation_matrix(finger_data->base, frequency, rotation_matrix);
     // change rotation matrix basis from 
     vec3 imu_to_hand_basis[3];
     fill_change_basis_matrix(finger->basis, hand_basis, imu_to_hand_basis);
@@ -35,7 +35,7 @@ void calibrate_thumb(Thumb* thumb) {
     thumb->knuckle_rotation = 0;
 }
 
-void update_thumb(Thumb* thumb, FingerSensorData finger_data, int16_t knuckle_rotation_change, int16_t frequency, vec3* hand_basis) {
+void update_thumb(Thumb* thumb, FingerSensorData* finger_data, int16_t knuckle_rotation_change, int16_t frequency, vec3* hand_basis) {
     // could probably do some sensor fusion here to make the finger data more accurate
     update_finger(&(thumb->finger), finger_data, frequency, hand_basis);
     thumb->knuckle_rotation += knuckle_rotation_change;

@@ -1,6 +1,7 @@
 #ifndef UTIL_HAND
 #define UTIL_HAND
 
+#include <stdlib.h>
 #include <stdint.h>
 
 // rotation vector based on gyroscope x, y and z from Bosch BMI 323
