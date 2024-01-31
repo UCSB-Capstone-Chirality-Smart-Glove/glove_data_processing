@@ -14,15 +14,33 @@ void fill_rotation_matrix(rotation_vec3 rotation, float frequency, vec3 matrix[3
     int16_t pitch = rotation.pitch/frequency*ANGLE_RESOLUTION;
     int16_t yaw = rotation.yaw/frequency*ANGLE_RESOLUTION;
 
-    matrix[0].x = cosine[roll]*cosine[pitch];
-    matrix[0].y = sine[roll]*cosine[pitch];
-    matrix[0].z = -sine[pitch];
-    matrix[1].x = cosine[roll]*sine[pitch]*sine[yaw] - sine[roll]*cosine[yaw];
-    matrix[1].y = sine[roll]*sine[pitch]*sine[yaw] + cosine[roll]*cosine[yaw];
-    matrix[1].z = cosine[pitch]*sine[yaw];
-    matrix[2].x = cosine[roll]*sine[pitch]*cosine[yaw] + sine[roll]*sine[yaw];
-    matrix[2].y = sine[roll]*sine[pitch]*cosine[yaw] - cosine[roll]*sine[yaw];
-    matrix[2].z = cosine[pitch]*cosine[yaw];
+    if (roll < 0) roll += 360;
+    if (pitch < 0 ) pitch += 360;
+    if (yaw < 0 ) yaw += 360;
+
+    vec3* roll_matrix = (vec3*)calloc(3, sizeof(vec3));
+    vec3* pitch_matrix = (vec3*)calloc(3, sizeof(vec3));
+    vec3* yaw_matrix = (vec3*)calloc(3, sizeof(vec3));
+
+    roll_matrix[0] = (vec3) {1, 0, 0};
+    roll_matrix[1] = (vec3) {0, cosine[roll], sine[roll]};
+    roll_matrix[2] = (vec3) {0, -sine[roll], cosine[roll]};
+
+    pitch_matrix[0] = (vec3) {cosine[pitch], 0, -sine[pitch]};
+    pitch_matrix[1] = (vec3) {0, 1, 0};
+    pitch_matrix[2] = (vec3) {sine[pitch], 0, cosine[pitch]};
+
+    yaw_matrix[0] = (vec3) {cosine[yaw], sine[yaw], 0};
+    yaw_matrix[1] = (vec3) {-sine[yaw], cosine[yaw], 0};
+    yaw_matrix[2] = (vec3) {0, 0, 1};
+
+    for(int i = 0; i < 3; i++) {
+        matrix[i] = multiply_vector_over_matrix(pitch_matrix, yaw_matrix[i]);
+    }
+    for(int i = 0; i < 3; i++) pitch_matrix[i] = matrix[i];
+    for(int i = 0; i < 3; i++) {
+        matrix[i] = multiply_vector_over_matrix(roll_matrix, pitch_matrix[i]);
+    }
 }
 
 void fill_change_basis_matrix(vec3 old[3], vec3 new[3], vec3 matrix[3]) {

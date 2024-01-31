@@ -41,17 +41,17 @@ void test_multiply_vector_over_matrix() {
 void test_fill_rotation_matrix() {
     printf("Testing fill_rotation_matrix...");
     rotation_vec3 rotation = (rotation_vec3) {
-        .roll = 135,
-        .pitch = 360,
-        .yaw = 285
+        .roll = 450,
+        .pitch = 750,
+        .yaw = 300
     };
-    double frequency = 3;
+    double frequency = 10;
     vec3 result[3] = {(vec3) {0, 0, 0},
                       (vec3) {0, 0, 0}, 
                       (vec3) {0, 0, 0}};
-    vec3 expected_result[3] = {(vec3) {0.0435779,-0.4980974, -0.8660254},
-                               (vec3) {-0.7577878, 0.5484138, -0.3535534},
-                               (vec3) {0.6510442, 0.6716706, -0.3535534}};
+    vec3 expected_result[3] = {(vec3) {0.2241439,0.9450597, -0.2379530},
+                               (vec3) {-0.1294095, 0.2708661, 0.9538788},
+                               (vec3) {0.9659258, -0.1830127, 0.1830127 }};
     fill_rotation_matrix(rotation, frequency, result);
     if (vectors_are_same(expected_result[0], result[0]) &&
         vectors_are_same(expected_result[1], result[1]) &&
