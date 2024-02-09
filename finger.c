@@ -36,7 +36,7 @@ void update_finger(Finger* finger, FingerSensorData* finger_data, int16_t freque
     average_matrices(matrices, weights, 2, rotation_matrix);
 
     // change rotation matrix basis to hand basis (which we treat as the standard basis)
-    vec3* imu_to_hand_basis = calloc(3, sizeof(vec3));
+    vec3 imu_to_hand_basis[3];
     fill_change_basis_matrix(finger->basis, hand_basis, imu_to_hand_basis);
     vec3 temp[3];
     for (int i = 0; i < 3; i++) {
