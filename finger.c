@@ -17,12 +17,12 @@ void generate_gyroscope_update_matrix(Finger* finger, FingerSensorData* finger_d
 
 void update_finger(Finger* finger, FingerSensorData* finger_data, int16_t frequency, vec3 hand_basis[3]) {
     // create gyroscope update matrix
-    vec3* gyro_rotation_matrix = calloc(3, sizeof(vec3));
+    vec3 gyro_rotation_matrix[3];
     fill_rotation_matrix(finger_data->base, frequency, gyro_rotation_matrix);
 
     // TODO: create accelerometer update matrix
     // stub:
-    vec3* accel_rotation_matrix = calloc(3, sizeof(vec3));
+    vec3 accel_rotation_matrix[3];
     accel_rotation_matrix[0] = (vec3) {1, 0, 0};
     accel_rotation_matrix[1] = (vec3) {0, 1, 0};
     accel_rotation_matrix[2] = (vec3) {0, 0, 1};
@@ -32,7 +32,7 @@ void update_finger(Finger* finger, FingerSensorData* finger_data, int16_t freque
     float accel_weight = 0;
     float weights[2] = {gyro_weight, accel_weight};
     vec3 *matrices[2] = {gyro_rotation_matrix, accel_rotation_matrix};
-    vec3* rotation_matrix = calloc(3, sizeof(vec3));
+    vec3 rotation_matrix[3];
     average_matrices(matrices, weights, 2, rotation_matrix);
 
     // change rotation matrix basis to hand basis (which we treat as the standard basis)
