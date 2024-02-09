@@ -33,8 +33,11 @@ int16_t get_bend(FingerSensorData* finger_data, int16_t frequency);
 // potentially recalibrate using accelerometer and gravity in the future
 void calibrate_finger(Finger* finger);
 
+// Creates a rotation matrix based on incoming gyroscope sensor data, and store it in result
+void generate_gyroscope_update_matrix(Finger* finger, FingerSensorData* finger_data, int16_t frequency, vec3 hand_basis[3], vec3 result[3]);
+
 // updates the direction and bend of the passed finger, using IMU data for the base and tip of the finger
-void update_finger(Finger* finger, FingerSensorData* finger_data, int16_t frequency, vec3* hand_basis);
+void update_finger(Finger* finger, FingerSensorData* finger_data, int16_t frequency, vec3 hand_basis[3]);
 
 typedef struct {
     Finger finger;
