@@ -19,9 +19,9 @@ void fill_rotation_matrix(rotation_vec3 rotation, float frequency, vec3 matrix[3
     if (pitch < 0 ) pitch += 360;
     if (yaw < 0 ) yaw += 360;
 
-    vec3* roll_matrix = (vec3*)calloc(3, sizeof(vec3));
-    vec3* pitch_matrix = (vec3*)calloc(3, sizeof(vec3));
-    vec3* yaw_matrix = (vec3*)calloc(3, sizeof(vec3));
+    vec3 roll_matrix[3];
+    vec3 pitch_matrix[3];
+    vec3 yaw_matrix[3];
 
     roll_matrix[0] = (vec3) {1, 0, 0};
     roll_matrix[1] = (vec3) {0, cosine[roll], sine[roll]};
