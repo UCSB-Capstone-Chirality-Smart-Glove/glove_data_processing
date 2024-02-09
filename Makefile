@@ -1,4 +1,5 @@
 CFLAGS = -g -O0 -Wall
+binaries = glove test
 
 glove:
 		gcc main.c finger.c hand.c util.c -o glove ${CFLAGS}
@@ -8,4 +9,4 @@ test:
 		./test
 
 clean:
-		rm -f glove *.exe *.o
+		rm -f ${binaries} *.exe *.o
