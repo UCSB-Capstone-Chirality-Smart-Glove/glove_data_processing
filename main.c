@@ -3,7 +3,6 @@
 
 #include "testing/util_test.h"
 // #include "hand.h"
-// #include "sanity.h"
 
 int main() {
     printf("bruh\n");
@@ -12,6 +11,7 @@ int main() {
     test_multiply_vector_over_matrix();
     test_fill_rotation_matrix();
     test_fill_change_basis_matrix();
+    test_average_matrices();
     // while(running) {
     //     // update fingers
 

@@ -15,3 +15,5 @@ void test_multiply_vector_over_matrix();
 void test_fill_rotation_matrix();
 
 void test_fill_change_basis_matrix();
+
+void test_average_matrices();

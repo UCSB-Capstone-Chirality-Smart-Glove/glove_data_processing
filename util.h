@@ -36,6 +36,9 @@ void fill_change_basis_matrix(vec3 old[3], vec3 new[3], vec3 matrix[3]);
 // transposes a 3-long vec3 array in place
 void transpose_matrix(vec3 matrix[3]);
 
+// takes element-wise weighted average of passed matrix array and stores it in result
+void average_matrices(vec3 **matrices, float *weights, int length, vec3 result[3]);
+
 // maximum angular rate of BMI323; set manually
 #define angular_rate_max 500.0
 

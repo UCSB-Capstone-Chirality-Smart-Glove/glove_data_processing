@@ -1,4 +1,5 @@
 #include "util.h"
+#include <stdio.h>
 
 vec3 multiply_vector_over_matrix(vec3 matrix[3], vec3 vector) {
     vec3 result = (vec3) {
@@ -83,6 +84,26 @@ void transpose_matrix(vec3 matrix[3]) {
     swap(&matrix[0].y, &matrix[1].x);
     swap(&matrix[0].z, &matrix[2].x);
     swap(&matrix[1].z, &matrix[2].y);
+}
+
+void average_matrices(vec3 **matrices, float *weights, int length, vec3 result[3]) {
+    float total = 0;
+    for (int i = 0; i < length; i++) {
+        total += weights[i];
+    }
+    for (int i = 0; i < 3; i++) {
+        result[i].x = 0;
+        result[i].y = 0;
+        result[i].z = 0;
+    }
+
+    for (int i = 0; i < length; i++) {
+        for (int col = 0; col < 3; col++) {
+            result[col].x += (matrices[i])[col].x * weights[i] / total;
+            result[col].y += (matrices[i])[col].y * weights[i] / total;
+            result[col].z += (matrices[i])[col].z * weights[i] / total;
+        }
+    }
 }
 
 float LSB_to_degrees = angular_rate_max / INT16_MAX;

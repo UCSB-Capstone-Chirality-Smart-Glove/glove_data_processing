@@ -98,3 +98,44 @@ void test_fill_change_basis_matrix() {
     }
 
 }
+
+void test_average_matrices() {
+    printf("Testing average_matrices...");
+    vec3 m1[3] = {
+        (vec3) {1, 1, 1}, 
+        (vec3) {3, 3, 3}, 
+        (vec3) {7, 7, 7}
+    };
+    vec3 m2[3] = {
+        (vec3) {2, 4, 6}, 
+        (vec3) {2, 4, 6}, 
+        (vec3) {2, 4, 6}
+    };
+    vec3 m3[3] = {
+        (vec3) {5, 5, 5}, 
+        (vec3) {5, 5, 5}, 
+        (vec3) {5, 5, 5}, 
+    };
+    vec3 *matrices[3] = {m1, m2, m3};
+    float weights[3] = {0.3, 0.5, 0.2};
+    vec3 result[3];
+    average_matrices(matrices, weights, 3, result);
+    vec3 expected_result[3] = {
+        (vec3) {2.3, 3.3, 4.3}, 
+        (vec3) {2.9, 3.9, 4.9},
+        (vec3) {4.1, 5.1, 6.1}
+    };
+    if (vectors_are_same(expected_result[0], result[0]) &&
+        vectors_are_same(expected_result[1], result[1]) &&
+        vectors_are_same(expected_result[2], result[2])
+    ) {
+        printf("Success!\n");
+    }
+    else {
+        printf("Failed:\n");
+        printf("Expected:\n");
+        print_matrix(expected_result);
+        printf("Actual:\n");
+        print_matrix(result);
+    }
+}
