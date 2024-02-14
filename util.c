@@ -11,9 +11,9 @@ vec3 multiply_vector_over_matrix(vec3 matrix[3], vec3 vector) {
 }
 
 void fill_rotation_matrix(rotation_vec3 rotation, float frequency, vec3 matrix[3]) {
-    int16_t roll = rotation.roll/frequency*ANGLE_RESOLUTION;
-    int16_t pitch = rotation.pitch/frequency*ANGLE_RESOLUTION;
-    int16_t yaw = rotation.yaw/frequency*ANGLE_RESOLUTION;
+    int16_t roll = fmod(rotation.roll/frequency*ANGLE_RESOLUTION, 360);
+    int16_t pitch = fmod(rotation.pitch/frequency*ANGLE_RESOLUTION, 360);
+    int16_t yaw = fmod(rotation.yaw/frequency*ANGLE_RESOLUTION, 360);
 
     if (roll < 0) roll += 360;
     if (pitch < 0 ) pitch += 360;

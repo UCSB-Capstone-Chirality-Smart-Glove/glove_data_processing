@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdint.h>
+#include <math.h>
 
 // rotation vector based on gyroscope x, y and z from Bosch BMI 323
 //

@@ -1,4 +1,4 @@
-CFLAGS = -g -O0 -Wall
+CFLAGS = -g -O0 -Wall -lm
 binaries = glove test
 
 glove:
