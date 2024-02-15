@@ -44,8 +44,35 @@ void fill_rotation_matrix(rotation_vec3 rotation, float frequency, vec3 matrix[3
     }
 }
 
+vec3* rotation_from_gravity(vec3 gravity_vector){
+    L2_vec_norm(&gravity_vector);
+    vec3 z_axis = {0, 0, -1};
+    
+    vec3 rotation_axis = cross(z_axis, gravity_vector);
+    L2_vec_norm(&rotation_axis);
+
+    // # Step 3: Calculate Rotation Angle
+    float c = dot_vec3(z_axis, gravity_vector); // contains cosine value
+    // TODO: rotation_angle = arccos(dot_product)
+
+    // # Step 4: Construct Rotation Matrix
+    float s = sqrt(1.0 - c*c);
+    float t = 1 - c;
+
+    float x = rotation_axis.x, y = rotation_axis.y , z = rotation_axis.z;
+
+    //utilizing Rodiguez rotation algorithm/formula
+    vec3 rotation_matrix[3] = {
+        (vec3) {t*x*x + c,    t*x*y - z*s,  t*x*z + y*s}, 
+        (vec3) {t*x*y + z*s,  t*y*y + c,    t*y*z - x*s}, 
+        (vec3) {t*x*z - y*s,  t*y*z + x*s,  t*z*z + c}
+        };
+
+    return rotation_matrix;
+}
+
 void fill_change_basis_matrix(vec3 old[3], vec3 new[3], vec3 matrix[3]) {
-    // find inverse of new basis
+    // find inverse of new basis 
     float det11 = new[1].y*new[2].z - new[1].z*new[2].y;
     float det21 = new[0].z*new[2].y - new[0].y*new[2].z;
     float det31 = new[0].y*new[1].z - new[0].z*new[1].y;
@@ -84,6 +111,24 @@ void transpose_matrix(vec3 matrix[3]) {
     swap(&matrix[0].y, &matrix[1].x);
     swap(&matrix[0].z, &matrix[2].x);
     swap(&matrix[1].z, &matrix[2].y);
+}
+
+void L2_vec_norm(vec3* v){
+    v->x /= sqrt(v->x*v->x + v->y*v->y + v->z*v->z);
+    v->y /= sqrt(v->x*v->x + v->y*v->y + v->z*v->z);
+    v->z /= sqrt(v->x*v->x + v->y*v->y + v->z*v->z);
+}
+
+vec3 cross(vec3 v1, vec3 v2){
+    return (vec3) {
+        .x = v1.y*v2.z - v1.z*v2.y,
+        .y = v1.z*v2.x - v1.x*v2.z,
+        .z = v1.x*v2.y - v1.y*v2.x
+    };
+}
+
+float dot_vec3(vec3 v1, vec3 v2){
+    return (v1.x*v2.x + v1.y*v2.y + v1.z*v2.z);
 }
 
 void average_matrices(vec3 **matrices, float *weights, int length, vec3 result[3]) {

@@ -22,6 +22,8 @@ typedef struct {
 typedef struct {
     rotation_vec3 base;
     rotation_vec3 tip;
+    vec3 accel_base;
+    vec3 accel_tip;
 } FingerSensorData;
 
 // Returns change in bend in degrees

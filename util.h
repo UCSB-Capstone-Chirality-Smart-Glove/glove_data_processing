@@ -37,6 +37,14 @@ void fill_change_basis_matrix(vec3 old[3], vec3 new[3], vec3 matrix[3]);
 // transposes a 3-long vec3 array in place
 void transpose_matrix(vec3 matrix[3]);
 
+vec3 cross(vec3 v1, vec3 v2);
+
+vec3* rotation_from_gravity(vec3 gravity_vector);
+
+void L2_vec_norm(vec3* vector);
+
+float dot_vec3(vec3 v1, vec3 v2);
+
 // takes element-wise weighted average of passed matrix array and stores it in result
 void average_matrices(vec3 **matrices, float *weights, int length, vec3 result[3]);
 
