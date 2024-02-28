@@ -39,7 +39,7 @@ void transpose_matrix(vec3 matrix[3]);
 
 vec3 cross(vec3 v1, vec3 v2);
 
-vec3* rotation_from_gravity(vec3 gravity_vector);
+void accel_rotation_from_gravity(vec3 prev_gravity_vector, vec3 gravity_vector, vec3* rotation_matrix);
 
 void L2_vec_norm(vec3* vector);
 

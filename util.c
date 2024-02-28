@@ -44,16 +44,20 @@ void fill_rotation_matrix(rotation_vec3 rotation, float frequency, vec3 matrix[3
     }
 }
 
-vec3* rotation_from_gravity(vec3 gravity_vector){
+void accel_rotation_from_gravity(vec3 prev_gravity_vector, vec3 gravity_vector, vec3* rotation_matrix){
     L2_vec_norm(&gravity_vector);
-    vec3 z_axis = {0, 0, -1};
-    
-    vec3 rotation_axis = cross(z_axis, gravity_vector);
-    L2_vec_norm(&rotation_axis);
+        // # Step 3: Calculate Rotation Angle
+    float c = dot_vec3(prev_gravity_vector, gravity_vector); // contains cosine value
+    vec3 rotation_axis = cross(gravity_vector, prev_gravity_vector);//cross(prev_gravity_vector, gravity_vector);
 
-    // # Step 3: Calculate Rotation Angle
-    float c = dot_vec3(z_axis, gravity_vector); // contains cosine value
-    // TODO: rotation_angle = arccos(dot_product)
+    if (fabs(rotation_axis.x) < 0.0001 && fabs(rotation_axis.y) < 0.0001 && fabs(rotation_axis.z) < 0.0001) {
+        rotation_matrix[0] = (vec3) {1, 0, 0};
+        rotation_matrix[1] = (vec3) {0, 1, 0};
+        rotation_matrix[2] = (vec3) {0, 0, 1};
+        return;
+    }
+    L2_vec_norm(&rotation_axis);
+    // printf("%f, %f, %f", rotation_axis.x, rotation_axis.y, rotation_axis.z);
 
     // # Step 4: Construct Rotation Matrix
     float s = sqrt(1.0 - c*c);
@@ -61,14 +65,9 @@ vec3* rotation_from_gravity(vec3 gravity_vector){
 
     float x = rotation_axis.x, y = rotation_axis.y , z = rotation_axis.z;
 
-    //utilizing Rodiguez rotation algorithm/formula
-    vec3 rotation_matrix[3] = {
-        (vec3) {t*x*x + c,    t*x*y - z*s,  t*x*z + y*s}, 
-        (vec3) {t*x*y + z*s,  t*y*y + c,    t*y*z - x*s}, 
-        (vec3) {t*x*z - y*s,  t*y*z + x*s,  t*z*z + c}
-        };
-
-    return rotation_matrix;
+    rotation_matrix[0] = (vec3) {t*x*x + c,    t*x*y - z*s,  t*x*z + y*s};
+    rotation_matrix[1] = (vec3) {t*x*y + z*s,  t*y*y + c,    t*y*z - x*s};
+    rotation_matrix[2] = (vec3) {t*x*z - y*s,  t*y*z + x*s,  t*z*z + c};
 }
 
 void fill_change_basis_matrix(vec3 old[3], vec3 new[3], vec3 matrix[3]) {
@@ -114,9 +113,10 @@ void transpose_matrix(vec3 matrix[3]) {
 }
 
 void L2_vec_norm(vec3* v){
-    v->x /= sqrt(v->x*v->x + v->y*v->y + v->z*v->z);
-    v->y /= sqrt(v->x*v->x + v->y*v->y + v->z*v->z);
-    v->z /= sqrt(v->x*v->x + v->y*v->y + v->z*v->z);
+    float x = v->x, y = v->y, z = v->z;
+    v->x /= sqrt(x*x + y*y + z*z);
+    v->y /= sqrt(x*x + y*y + z*z);
+    v->z /= sqrt((x*x + y*y + z*z));
 }
 
 vec3 cross(vec3 v1, vec3 v2){

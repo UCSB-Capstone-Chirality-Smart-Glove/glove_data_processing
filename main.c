@@ -5,16 +5,17 @@
 // #include "hand.h"
 
 int main() {
-    printf("bruh\n");
 
     //--- test utils ---//
     // test_multiply_vector_over_matrix();
     // test_fill_rotation_matrix();
     // test_fill_change_basis_matrix();
-    vec3 gravity_vector = {0, 0, -1};
-    vec3* rot_matrix = rotation_from_gravity(gravity_vector);
-    print_matrix(rot_matrix);
-    test_average_matrices();
+    vec3 prev_grav = {0, 0, -1};
+    vec3 gravity_vector = {0, -1, -1};
+    vec3 rotation_matrix[3];
+    accel_rotation_from_gravity(prev_grav, gravity_vector, rotation_matrix);
+    print_matrix(rotation_matrix);
+    // test_average_matrices();
     // while(running) {
     //     // update fingers
 
