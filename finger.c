@@ -15,7 +15,7 @@ void generate_gyroscope_update_matrix(Finger* finger, FingerSensorData* finger_d
     fill_rotation_matrix(finger_data->base, frequency, result);
 }
 
-void update_finger(Finger* finger, FingerSensorData* finger_data, int16_t frequency, vec3 hand_basis[3], vec3 prev_gravity, vec3 gravity_vec) {
+void update_finger(Finger* finger, FingerSensorData* finger_data, int16_t frequency, vec3 hand_basis[3]) {
     // create gyroscope updatex matrix
     vec3 gyro_rotation_matrix[3];
     fill_rotation_matrix(finger_data->base, frequency, gyro_rotation_matrix);
@@ -23,11 +23,11 @@ void update_finger(Finger* finger, FingerSensorData* finger_data, int16_t freque
     // TODO: create accelerometer update matrix
     // stub:
     vec3 accel_rotation_matrix[3];
-    accel_rotation_from_gravity(prev_gravity, gravity_vec, accel_rotation_matrix);
+    accel_rotation_from_gravity(finger_data->accel_base, finger_data->accel_base, accel_rotation_matrix);
 
     // take weighted average of matrices
-    float gyro_weight = 1;
-    float accel_weight = 0;
+    float gyro_weight = 0;
+    float accel_weight = 1;
     float weights[2] = {gyro_weight, accel_weight};
     vec3 *matrices[2] = {gyro_rotation_matrix, accel_rotation_matrix};
     vec3 rotation_matrix[3];
@@ -50,8 +50,8 @@ void calibrate_thumb(Thumb* thumb) {
     thumb->knuckle_rotation = 0;
 }
 
-void update_thumb(Thumb* thumb, FingerSensorData* finger_data, int16_t knuckle_rotation_change, int16_t frequency, vec3* hand_basis, vec3 prev_gravity, vec3 gravity_vec) {
+void update_thumb(Thumb* thumb, FingerSensorData* finger_data, int16_t knuckle_rotation_change, int16_t frequency, vec3* hand_basis) {
     // could probably do some sensor fusion here to make the finger data more accurate
-    update_finger(&(thumb->finger), finger_data, frequency, hand_basis, prev_gravity, gravity_vec);
+    update_finger(&(thumb->finger), finger_data, frequency, hand_basis);
     thumb->knuckle_rotation += knuckle_rotation_change;
 }

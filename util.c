@@ -46,9 +46,10 @@ void fill_rotation_matrix(rotation_vec3 rotation, float frequency, vec3 matrix[3
 
 void accel_rotation_from_gravity(vec3 prev_gravity_vector, vec3 gravity_vector, vec3* rotation_matrix){
     L2_vec_norm(&gravity_vector);
+    L2_vec_norm(&prev_gravity_vector);
         // # Step 3: Calculate Rotation Angle
     float c = dot_vec3(prev_gravity_vector, gravity_vector); // contains cosine value
-    vec3 rotation_axis = cross(gravity_vector, prev_gravity_vector);//cross(prev_gravity_vector, gravity_vector);
+    vec3 rotation_axis = cross(gravity_vector, prev_gravity_vector);
 
     if (fabs(rotation_axis.x) < 0.0001 && fabs(rotation_axis.y) < 0.0001 && fabs(rotation_axis.z) < 0.0001) {
         rotation_matrix[0] = (vec3) {1, 0, 0};
@@ -56,18 +57,27 @@ void accel_rotation_from_gravity(vec3 prev_gravity_vector, vec3 gravity_vector, 
         rotation_matrix[2] = (vec3) {0, 0, 1};
         return;
     }
-    L2_vec_norm(&rotation_axis);
+    // L2_vec_norm(&rotation_axis);
     // printf("%f, %f, %f", rotation_axis.x, rotation_axis.y, rotation_axis.z);
 
     // # Step 4: Construct Rotation Matrix
     float s = sqrt(1.0 - c*c);
     float t = 1 - c;
+    // float t = 1/(1+c);
 
     float x = rotation_axis.x, y = rotation_axis.y , z = rotation_axis.z;
 
-    rotation_matrix[0] = (vec3) {t*x*x + c,    t*x*y - z*s,  t*x*z + y*s};
-    rotation_matrix[1] = (vec3) {t*x*y + z*s,  t*y*y + c,    t*y*z - x*s};
-    rotation_matrix[2] = (vec3) {t*x*z - y*s,  t*y*z + x*s,  t*z*z + c};
+    // rotation_matrix[0] = (vec3) {t*x*x + c,    t*x*y - z*s,  t*x*z + y*s};
+    // rotation_matrix[1] = (vec3) {t*x*y + z*s,  t*y*y + c,    t*y*z - x*s};
+    // rotation_matrix[2] = (vec3) {t*x*z - y*s,  t*y*z + x*s,  t*z*z + c};
+
+    // rotation_matrix[0] = (vec3) {1-t*(z*z+y*y), z+t*x*y, -1*y+t*x*z};
+    // rotation_matrix[1] = (vec3) {-1*z+t*x*y, 1-t*(z*z+x*x), x+t*y*z};
+    // rotation_matrix[2] = (vec3) {y+t*z*x, -1*x+t*z*y, 1-t*(y*y+x*x)};
+
+    rotation_matrix[0] = (vec3) {1-t*(z*z+y*y), s*z+t*x*y, t*x*z - s*y};
+    rotation_matrix[1] = (vec3) {t*x*y - s*z, 1-t*(z*z+x*x), s*x+t*y*z};
+    rotation_matrix[2] = (vec3) {s*y+t*z*x, t*z*y-s*x, 1-t*(y*y+x*x)};
 }
 
 void fill_change_basis_matrix(vec3 old[3], vec3 new[3], vec3 matrix[3]) {
